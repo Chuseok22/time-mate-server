@@ -1,0 +1,43 @@
+name: time-mate-build.yml
+
+on:
+  pull_request:
+    branches:
+      - main
+      - test
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'gradle'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # application-prod.yml 파일을 빌드 전에 생성
+      - name: Create application-prod.yml from secret
+        run: |
+          echo "${{ secrets.APPLICATION_PROD_YML }}" > src/main/resources/application-prod.yml
+
+      # 브랜치 별 active profile 설정
+      - name: Decide active profile
+        id: profile
+        run: |
+          if [ "${GITHUB_REF_NAME}" = "deploy" ]; then
+            echo "PROFILE=deploy" >> $GITHUB_OUTPUT
+          else
+            echo "PROFILE=prod" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build with Gradle
+        run: ./gradlew clean build -x test -Dspring.profiles.active=${{ steps.profile.outputs.PROFILE }}
