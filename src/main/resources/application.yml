@@ -18,3 +18,19 @@ spring:
       date-time: "yyyy-MM-dd'T'HH:mm:ss"
     pathmatch:
       matching-strategy: ant_path_matcher
+
+springdoc:
+  servers:
+    - url: http://chuseok22.synology.me:8091
+      description: main-server
+    - url: http://chuseok22.synology.me:8092
+      description: test-server
+    - url: http://localhost:8080
+      description: local-server
+
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    path: /docs/swagger
+server:
+  forward-headers-strategy: framework
