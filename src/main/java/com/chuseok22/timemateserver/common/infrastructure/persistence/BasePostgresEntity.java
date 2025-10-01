@@ -1,13 +1,10 @@
 package com.chuseok22.timemateserver.common.infrastructure.persistence;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,4 +32,9 @@ public abstract class BasePostgresEntity {
   @LastModifiedDate
   @Column(nullable = false, columnDefinition = "TIMESTAMP(0)")
   private LocalDateTime updatedAt;
+
+  // 삭제여부
+  @Builder.Default
+  @Column(nullable = false)
+  private boolean isDeleted = false;
 }
