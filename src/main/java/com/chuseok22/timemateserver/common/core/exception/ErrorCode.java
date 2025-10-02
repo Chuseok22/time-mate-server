@@ -18,12 +18,12 @@ public enum ErrorCode {
 
   // Meeting Room
 
-  MEETING_ROOM_NOT_FOUND(HttpStatus.BAD_REQUEST, "Meeting Room을 찾을 수 없습니다."),
+  MEETING_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "Meeting Room을 찾을 수 없습니다."),
 
 
   // TimeSlot
 
-  TIME_SLOT_NOT_FOUND(HttpStatus.BAD_REQUEST, "LocalTime에 맞는 TimeSlot이 없습니다."),
+  TIME_SLOT_NOT_FOUND(HttpStatus.NOT_FOUND, "LocalTime에 맞는 TimeSlot이 없습니다."),
   ;
 
   private final HttpStatus status;
