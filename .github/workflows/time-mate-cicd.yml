@@ -68,7 +68,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.PROJECT_NAME }}:${{ github.ref_name }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.PROJECT_NAME }}-back:${{ github.ref_name }}
           cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ env.PROJECT_NAME }}:cache
           cache-to: type=inline
 
@@ -93,7 +93,7 @@ jobs:
             PORT=8080
             CONTAINER_NAME=${{ env.PROJECT_NAME }}-back
             PROFILE="prod"
-            IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/${{ env.PROJECT_NAME }}:${BRANCH}
+            IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/${{ env.PROJECT_NAME }}-back:${BRANCH}
             
             if [ "$BRANCH" == "main" ]; then
               PORT=8091
