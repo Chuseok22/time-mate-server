@@ -15,6 +15,15 @@ public enum ErrorCode {
   INVALID_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
 
   ACCESS_DENIED(HttpStatus.FORBIDDEN, "접근이 거부되었습니다."),
+
+  // Meeting Room
+
+  MEETING_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "Meeting Room을 찾을 수 없습니다."),
+
+
+  // TimeSlot
+
+  TIME_SLOT_NOT_FOUND(HttpStatus.NOT_FOUND, "LocalTime에 맞는 TimeSlot이 없습니다."),
   ;
 
   private final HttpStatus status;
