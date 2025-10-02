@@ -35,4 +35,11 @@ public class MeetingDate extends BasePostgresEntity {
 
   @Column(nullable = false)
   private LocalDate date;
+
+  public static MeetingDate create(MeetingRoom meetingRoom, LocalDate date) {
+    return MeetingDate.builder()
+        .meetingRoom(meetingRoom)
+        .date(date)
+        .build();
+  }
 }

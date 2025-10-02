@@ -27,4 +27,10 @@ public class MeetingRoom extends BasePostgresEntity {
 
   @Column(nullable = false)
   private String title;
+
+  public static MeetingRoom create(String title) {
+    return MeetingRoom.builder()
+        .title(title)
+        .build();
+  }
 }
