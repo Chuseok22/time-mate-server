@@ -42,7 +42,7 @@ public class AvailabilityTime extends BasePostgresEntity {
   private Participant participant;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "metting_date_id", nullable = false)
+  @JoinColumn(name = "meeting_date_id", nullable = false)
   private MeetingDate meetingDate;
 
   @Enumerated(EnumType.STRING)
