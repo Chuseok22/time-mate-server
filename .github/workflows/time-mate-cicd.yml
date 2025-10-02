@@ -7,7 +7,7 @@ on:
       - test
 
 env:
-  PROJECT_NAME: 'time-mate'
+  PROJECT_NAME: meet-time
 
 jobs:
   build:
@@ -124,7 +124,7 @@ jobs:
               -e TZ=Asia/Seoul \
               -e "SPRING_PROFILES_ACTIVE=${PROFILE}" \
               -v /etc/localtime:/etc/localtime:ro \
-              -v /volume1/project/time-mate/server:/app \
+              -v /volume1/project/meet-time/server:/app \
               ${IMAGE}
             
             # <none> 태그로 남은 이미지 정리
