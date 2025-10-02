@@ -21,7 +21,7 @@ spring:
 
 springdoc:
   servers:
-    - url: http://chuseok22.synology.me:8091
+    - url: https://api.meet.chuseok22.com
       description: main-server
     - url: http://chuseok22.synology.me:8092
       description: test-server
