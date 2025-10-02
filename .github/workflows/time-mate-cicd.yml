@@ -98,7 +98,7 @@ jobs:
             if [ "$BRANCH" == "main" ]; then
               PORT=8091
             elif [ "$BRANCH" == "test" ]; then
-              CONTAINER_NAME=${{ env.PROJECT_NAME }}test
+              CONTAINER_NAME=${{ env.PROJECT_NAME }}-back-test
               PORT=8092
             fi
             
