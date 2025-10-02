@@ -24,6 +24,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @Table(
+    name = "meeting_date",
     uniqueConstraints = @UniqueConstraint(columnNames = {"meeting_room_id", "date"})
 )
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

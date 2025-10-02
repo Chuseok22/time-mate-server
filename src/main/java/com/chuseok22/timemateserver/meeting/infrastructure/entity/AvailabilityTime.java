@@ -24,6 +24,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @Table(
+    name = "availability_time",
     uniqueConstraints = @UniqueConstraint(columnNames = {"participant_id", "meeting_date_id"})
 )
 @Builder
