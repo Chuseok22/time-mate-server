@@ -23,6 +23,7 @@ public class MeetingDateServiceImpl implements MeetingDateService {
   @Transactional
   public List<MeetingDate> createDate(MeetingRoom room, List<LocalDate> dates) {
     List<MeetingDate> meetingDates = dates.stream()
+        .distinct()
         .map(date -> MeetingDate.create(room, date))
         .collect(Collectors.toList());
     return meetingDateRepository.saveAll(meetingDates);
