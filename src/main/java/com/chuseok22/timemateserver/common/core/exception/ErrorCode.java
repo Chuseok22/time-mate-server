@@ -16,6 +16,10 @@ public enum ErrorCode {
 
   ACCESS_DENIED(HttpStatus.FORBIDDEN, "접근이 거부되었습니다."),
 
+  // Meeting Room
+
+  MEETING_ROOM_NOT_FOUND(HttpStatus.BAD_REQUEST, "Meeting Room을 찾을 수 없습니다."),
+
 
   // TimeSlot
 
