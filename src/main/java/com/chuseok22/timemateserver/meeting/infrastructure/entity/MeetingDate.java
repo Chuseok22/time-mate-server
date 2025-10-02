@@ -9,6 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDate;
 import java.util.UUID;
 import lombok.AccessLevel;
@@ -21,6 +23,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 @AllArgsConstructor
+@Table(
+    uniqueConstraints = @UniqueConstraint(columnNames = {"meeting_room_id", "date"})
+)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MeetingDate extends BasePostgresEntity {
 
@@ -30,7 +35,7 @@ public class MeetingDate extends BasePostgresEntity {
   private UUID id;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(nullable = false)
+  @JoinColumn(name = "meeting_room_id", nullable = false)
   private MeetingRoom meetingRoom;
 
   @Column(nullable = false)

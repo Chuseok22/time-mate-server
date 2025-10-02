@@ -29,7 +29,7 @@ public class Participant extends BasePostgresEntity {
   private UUID id;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(nullable = false)
+  @JoinColumn(name = "meeting_room_id", nullable = false)
   private MeetingRoom meetingRoom;
 
   @Column(nullable = false)
