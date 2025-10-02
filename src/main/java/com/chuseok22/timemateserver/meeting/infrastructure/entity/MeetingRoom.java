@@ -8,11 +8,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.util.UUID;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MeetingRoom extends BasePostgresEntity {
 
@@ -23,7 +27,4 @@ public class MeetingRoom extends BasePostgresEntity {
 
   @Column(nullable = false)
   private String title;
-
-  @Column(unique = true)
-  private String shareUrl;
 }
