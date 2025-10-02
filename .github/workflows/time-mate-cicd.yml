@@ -91,7 +91,7 @@ jobs:
             export PW=${{ secrets.SERVER_PASSWORD }}
             BRANCH=${{ github.ref_name }}
             PORT=8080
-            CONTAINER_NAME=${{ env.PROJECT_NAME }}
+            CONTAINER_NAME=${{ env.PROJECT_NAME }}-back
             PROFILE="prod"
             IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/${{ env.PROJECT_NAME }}:${BRANCH}
             
