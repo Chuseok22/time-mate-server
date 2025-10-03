@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateParticipantRequest {
+public class ParticipantLoginRequest {
 
   @NotNull(message = "방 id를 입력하세요")
   private UUID meetingRoomId;

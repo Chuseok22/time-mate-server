@@ -10,5 +10,5 @@ public interface ParticipantJpaRepository extends JpaRepository<Participant, UUI
 
   List<Participant> findAllByMeetingRoom(MeetingRoom meetingRoom);
 
-  boolean existsByMeetingRoomAndUsername(MeetingRoom meetingRoom, String username);
+  Participant findByMeetingRoomAndUsername(MeetingRoom meetingRoom, String username);
 }

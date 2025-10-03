@@ -3,6 +3,7 @@ package com.chuseok22.timemateserver.meeting.core.repository;
 import com.chuseok22.timemateserver.meeting.infrastructure.entity.MeetingRoom;
 import com.chuseok22.timemateserver.meeting.infrastructure.entity.Participant;
 import java.util.List;
+import java.util.UUID;
 
 public interface ParticipantRepository {
 
@@ -10,7 +11,9 @@ public interface ParticipantRepository {
 
   List<Participant> saveAll(List<Participant> participants);
 
-  List<Participant> findAllByMeetingRoom(MeetingRoom meetingRoom);
+  Participant findById(UUID participantId);
 
-  boolean existsByMeetingRoomAndUsername(MeetingRoom meetingRoom, String username);
+  Participant findByMeetingRoomAndUsername(MeetingRoom meetingRoom, String username);
+
+  List<Participant> findAllByMeetingRoom(MeetingRoom meetingRoom);
 }
