@@ -39,7 +39,7 @@ public class MethodInvocationLoggingAspect {
     String requestId = (String) request.getAttribute("RequestID");
 
     // 메서드 호출 전 로그 기록
-    LOGGER.debug("[{}] RequestID: {}, Parameter: {}",
+    LOGGER.info("[{}] RequestID: {}, Parameter: {}",
         signature.getMethod().getName(),
         requestId,
         Arrays.toString(joinPoint.getArgs()));
@@ -49,7 +49,7 @@ public class MethodInvocationLoggingAspect {
       result = joinPoint.proceed(); // 메서드 실행
     } finally {
       // 메서드 호출 후 결과 값 로그 기록
-      LOGGER.debug("[{}] RequestID: {}, Result: {}",
+      LOGGER.info("[{}] RequestID: {}, Result: {}",
           signature.getMethod().getName(),
           requestId,
           result);
