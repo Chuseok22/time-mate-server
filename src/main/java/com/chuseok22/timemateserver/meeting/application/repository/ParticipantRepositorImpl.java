@@ -28,4 +28,9 @@ public class ParticipantRepositorImpl implements ParticipantRepository {
   public List<Participant> findAllByMeetingRoom(MeetingRoom meetingRoom) {
     return jpaRepository.findAllByMeetingRoom(meetingRoom);
   }
+
+  @Override
+  public boolean existsByMeetingRoomAndUsername(MeetingRoom meetingRoom, String username) {
+    return jpaRepository.existsByMeetingRoomAndUsername(meetingRoom, username);
+  }
 }

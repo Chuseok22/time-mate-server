@@ -11,4 +11,6 @@ public interface ParticipantRepository {
   List<Participant> saveAll(List<Participant> participants);
 
   List<Participant> findAllByMeetingRoom(MeetingRoom meetingRoom);
+
+  boolean existsByMeetingRoomAndUsername(MeetingRoom meetingRoom, String username);
 }
