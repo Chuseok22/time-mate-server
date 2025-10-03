@@ -1,5 +1,6 @@
 package com.chuseok22.timemateserver.meeting.infrastructure.entity;
 
+import com.chuseok22.timemateserver.common.core.util.CommonUtil;
 import com.chuseok22.timemateserver.common.infrastructure.persistence.BasePostgresEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,4 +37,12 @@ public class Participant extends BasePostgresEntity {
   private String username;
 
   private String password;
+
+  public static Participant create(MeetingRoom room, String username, String password) {
+    return Participant.builder()
+        .meetingRoom(room)
+        .username(username.trim())
+        .password(CommonUtil.nvl(password, "").isEmpty() ? null : password)
+        .build();
+  }
 }
