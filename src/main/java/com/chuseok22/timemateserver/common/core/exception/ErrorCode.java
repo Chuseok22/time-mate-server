@@ -20,14 +20,17 @@ public enum ErrorCode {
 
   MEETING_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "Meeting Room을 찾을 수 없습니다."),
 
-
   // TimeSlot
 
   TIME_SLOT_NOT_FOUND(HttpStatus.NOT_FOUND, "LocalTime에 맞는 TimeSlot이 없습니다."),
 
   // Participant
 
+  PARTICIPANT_NOT_FOUND(HttpStatus.NOT_FOUND, "참가자를 찾을 수 없습니다."),
+
   DUPLICATE_USERNAME(HttpStatus.CONFLICT, "이미 존재하는 이름입니다."),
+
+  INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
   ;
 
   private final HttpStatus status;
