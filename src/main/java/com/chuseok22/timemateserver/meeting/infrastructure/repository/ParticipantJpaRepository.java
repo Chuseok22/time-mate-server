@@ -9,4 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ParticipantJpaRepository extends JpaRepository<Participant, UUID> {
 
   List<Participant> findAllByMeetingRoom(MeetingRoom meetingRoom);
+
+  Participant findByMeetingRoomAndUsername(MeetingRoom meetingRoom, String username);
 }

@@ -29,7 +29,7 @@ public class ExecutionTimeLoggingAspect {
     } finally {
       long endTime = System.currentTimeMillis(); // 메서드 종료시간 (ms)
       long durationTimeSec = endTime - startTime;
-      log.debug("[{}] 실행시간: {}ms", signature.getMethod().getName(), durationTimeSec);
+      log.info("[{}] 실행시간: {}ms", signature.getMethod().getName(), durationTimeSec);
     }
 
     return result;
