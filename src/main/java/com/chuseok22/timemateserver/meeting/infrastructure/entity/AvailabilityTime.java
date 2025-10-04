@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(
     name = "availability_time",
-    uniqueConstraints = @UniqueConstraint(columnNames = {"participant_id", "meeting_date_id"})
+    uniqueConstraints = @UniqueConstraint(columnNames = {"participant_id", "meeting_date_id", "time_slot"})
 )
 @Builder
 @AllArgsConstructor
@@ -48,4 +48,12 @@ public class AvailabilityTime extends BasePostgresEntity {
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private TimeSlot timeSlot;
+
+  public static AvailabilityTime create(Participant participant, MeetingDate meetingDate, TimeSlot timeSlot) {
+    return AvailabilityTime.builder()
+        .participant(participant)
+        .meetingDate(meetingDate)
+        .timeSlot(timeSlot)
+        .build();
+  }
 }
