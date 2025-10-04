@@ -4,6 +4,7 @@ import com.chuseok22.timemateserver.meeting.core.repository.MeetingDateRepositor
 import com.chuseok22.timemateserver.meeting.infrastructure.entity.MeetingDate;
 import com.chuseok22.timemateserver.meeting.infrastructure.entity.MeetingRoom;
 import com.chuseok22.timemateserver.meeting.infrastructure.repository.MeetingDateJpaRepository;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -27,5 +28,10 @@ public class MeetingDateRepositoryImpl implements MeetingDateRepository {
   @Override
   public List<MeetingDate> findAllByMeetingRoom(MeetingRoom room) {
     return jpaRepository.findAllByMeetingRoom(room);
+  }
+
+  @Override
+  public MeetingDate findByDate(LocalDate date) {
+    return jpaRepository.findByDate(date);
   }
 }
