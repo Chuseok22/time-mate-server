@@ -8,6 +8,7 @@ import com.chuseok22.timemateserver.meeting.infrastructure.entity.Participant;
 import com.chuseok22.timemateserver.meeting.infrastructure.repository.AvailabilityTimeJpaRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -51,6 +52,7 @@ public class AvailabilityTimeRepositoryImpl implements AvailabilityTimeRepositor
     groupedByTimeSlot.forEach((timeSlot, availabilityTimeList) -> {
       List<Participant> participants = availabilityTimeList.stream()
           .map(AvailabilityTime::getParticipant)
+          .sorted(Comparator.comparing(Participant::getId))
           .collect(Collectors.toList());
       timeSlotParticipantsMap.put(timeSlot, participants);
     });
