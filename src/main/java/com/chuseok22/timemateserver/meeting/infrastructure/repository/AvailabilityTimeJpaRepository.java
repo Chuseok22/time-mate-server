@@ -1,11 +1,15 @@
 package com.chuseok22.timemateserver.meeting.infrastructure.repository;
 
 import com.chuseok22.timemateserver.meeting.infrastructure.entity.AvailabilityTime;
+import com.chuseok22.timemateserver.meeting.infrastructure.entity.MeetingDate;
 import com.chuseok22.timemateserver.meeting.infrastructure.entity.Participant;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AvailabilityTimeJpaRepository extends JpaRepository<AvailabilityTime, UUID> {
 
   void deleteAllByParticipant(Participant participant);
+
+  List<AvailabilityTime> findAllByMeetingDate(MeetingDate meetingDate);
 }
