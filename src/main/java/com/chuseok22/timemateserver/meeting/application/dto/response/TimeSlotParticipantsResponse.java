@@ -5,7 +5,8 @@ import java.util.List;
 
 public record TimeSlotParticipantsResponse(
     TimeSlot timeSlot,
-    List<ParticipantInfoResponse> participantInfoResponses
+    List<ParticipantInfoResponse> participantInfoResponses,
+    int availabilityCount
 ) {
 
 }
