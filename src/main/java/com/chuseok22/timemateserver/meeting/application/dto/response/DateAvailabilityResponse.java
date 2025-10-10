@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public record DateAvailabilityResponse(
-    LocalDate localDate,
+    LocalDate date,
     List<TimeSlotParticipantsResponse> timeSlotParticipantsResponses
 ) {
 
