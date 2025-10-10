@@ -8,7 +8,8 @@ public record RoomInfoResponse(
     UUID meetingRoomId,
     String title,
     List<LocalDate> dates,
-    int participantsCount
+    int participantsCount,
+    List<DateAvailabilityResponse> dateAvailabilityResponses
 ) {
 
 }

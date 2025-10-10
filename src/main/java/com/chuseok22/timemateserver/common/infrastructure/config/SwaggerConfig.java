@@ -19,8 +19,8 @@ import org.springframework.context.annotation.Configuration;
     info = @Info(
         title = "🎫 Meet Time 🎫",
         description = """
-            ### 🌐 Meet Time 웹사이트 🌐 : http:chuseok22.synology.me:3005
-            [**웹사이트 바로가기**](http:chuseok22.synology.me:3005)
+            ### 🌐 Meet Time 웹사이트 🌐 : https://meet.chuseok22.com
+            [**웹사이트 바로가기**](https://meet.chuseok22.com)
             
             ### 💻 **GitHub 저장소**
             - **[백엔드 소스코드](https://github.com/Chuseok22/time-mate-server)**
