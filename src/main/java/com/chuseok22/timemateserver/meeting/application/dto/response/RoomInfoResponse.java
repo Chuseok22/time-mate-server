@@ -8,9 +8,8 @@ public record RoomInfoResponse(
     UUID meetingRoomId,
     String title,
     List<LocalDate> dates,
-    int participantsCount
-
-    // 방 점보에는 언제 누가 가능한지 정보 추가
+    int participantsCount,
+    List<DateAvailabilityResponse> dateAvailabilityResponses
 ) {
 
 }
