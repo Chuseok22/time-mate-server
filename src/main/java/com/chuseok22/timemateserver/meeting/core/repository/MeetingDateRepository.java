@@ -13,6 +13,5 @@ public interface MeetingDateRepository {
 
   List<MeetingDate> findAllByMeetingRoom(MeetingRoom room);
 
-  MeetingDate findByDate(LocalDate date);
-
+  MeetingDate findOptionalByMeetingRoomAndDate(MeetingRoom room, LocalDate date);
 }
