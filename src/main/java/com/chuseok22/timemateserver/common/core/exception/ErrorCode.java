@@ -20,6 +20,10 @@ public enum ErrorCode {
 
   MEETING_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "Meeting Room을 찾을 수 없습니다."),
 
+  // Meeting Date
+
+  MEETING_DATE_NOT_FOUND(HttpStatus.NOT_FOUND, "Meeting Date를 찾을 수 없습니다."),
+
   // TimeSlot
 
   TIME_SLOT_NOT_FOUND(HttpStatus.NOT_FOUND, "LocalTime에 맞는 TimeSlot이 없습니다."),

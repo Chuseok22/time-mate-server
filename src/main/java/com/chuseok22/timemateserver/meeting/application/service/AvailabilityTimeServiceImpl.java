@@ -8,6 +8,7 @@ import com.chuseok22.timemateserver.meeting.core.repository.ParticipantRepositor
 import com.chuseok22.timemateserver.meeting.core.service.AvailabilityTimeService;
 import com.chuseok22.timemateserver.meeting.infrastructure.entity.AvailabilityTime;
 import com.chuseok22.timemateserver.meeting.infrastructure.entity.MeetingDate;
+import com.chuseok22.timemateserver.meeting.infrastructure.entity.MeetingRoom;
 import com.chuseok22.timemateserver.meeting.infrastructure.entity.Participant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,7 +40,8 @@ public class AvailabilityTimeServiceImpl implements AvailabilityTimeService {
   }
 
   private void saveAvailabilityTimes(Participant participant, AvailabilityTimeRequest request) {
-    MeetingDate meetingDate = meetingDateRepository.findByDate(request.getDate());
+    MeetingRoom room = participant.getMeetingRoom();
+    MeetingDate meetingDate = meetingDateRepository.findOptionalByMeetingRoomAndDate(room, request.getDate());
     List<AvailabilityTime> availabilityTimes = request.getTimeSlots().stream()
         .map(timeslot -> AvailabilityTime.create(participant, meetingDate, timeslot))
         .collect(Collectors.toList());
