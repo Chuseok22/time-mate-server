@@ -2,6 +2,7 @@ package com.chuseok22.timemateserver.meeting.application.mapper;
 
 import com.chuseok22.timemateserver.meeting.application.dto.response.ParticipantInfoResponse;
 import com.chuseok22.timemateserver.meeting.infrastructure.entity.Participant;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class ParticipantMapper {
   public List<ParticipantInfoResponse> toParticipantInfoResponses(List<Participant> participants) {
     return participants.stream()
         .map(this::toParticipantInfoResponse)
+        .sorted(Comparator.comparing(ParticipantInfoResponse::participantId))
         .collect(Collectors.toList());
   }
 }
