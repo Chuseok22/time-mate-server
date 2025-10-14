@@ -11,6 +11,7 @@ import com.chuseok22.timemateserver.meeting.core.repository.ParticipantRepositor
 import com.chuseok22.timemateserver.meeting.core.service.ParticipantService;
 import com.chuseok22.timemateserver.meeting.infrastructure.entity.MeetingRoom;
 import com.chuseok22.timemateserver.meeting.infrastructure.entity.Participant;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,8 +49,8 @@ public class ParticipantServiceImpl implements ParticipantService {
 
   @Override
   @Transactional(readOnly = true)
-  public int countParticipantsByMeetingRoom(MeetingRoom meetingRoom) {
-    return participantRepository.findAllByMeetingRoom(meetingRoom).size();
+  public List<Participant> findAllByMeetingRoom(MeetingRoom meetingRoom) {
+    return participantRepository.findAllByMeetingRoom(meetingRoom);
   }
 
   private void validatePassword(Participant participant, String password) {

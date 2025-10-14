@@ -1,10 +1,12 @@
 package com.chuseok22.timemateserver.meeting.application.mapper;
 
 import com.chuseok22.timemateserver.meeting.application.dto.response.DateAvailabilityResponse;
+import com.chuseok22.timemateserver.meeting.application.dto.response.ParticipantInfoResponse;
 import com.chuseok22.timemateserver.meeting.application.dto.response.RoomInfoResponse;
 import com.chuseok22.timemateserver.meeting.core.service.ParticipantService;
 import com.chuseok22.timemateserver.meeting.infrastructure.entity.MeetingDate;
 import com.chuseok22.timemateserver.meeting.infrastructure.entity.MeetingRoom;
+import com.chuseok22.timemateserver.meeting.infrastructure.entity.Participant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,11 +20,15 @@ import org.springframework.stereotype.Component;
 public class MeetingRoomMapper {
 
   private final ParticipantService participantService;
+  private final ParticipantMapper participantMapper;
   private final AvailabilityTimeMapper availabilityTimeMapper;
 
   public RoomInfoResponse toRoomInfoResponse(MeetingRoom meetingRoom, List<MeetingDate> meetingDates) {
     List<LocalDate> dates = extractDatesFromMeetingDates(meetingDates);
-    int participantCount = participantService.countParticipantsByMeetingRoom(meetingRoom);
+    List<Participant> participants = participantService.findAllByMeetingRoom(meetingRoom);
+
+    int participantCount = participants.size();
+    List<ParticipantInfoResponse> participantInfoResponses = participantMapper.toParticipantInfoResponses(participants);
 
     List<DateAvailabilityResponse> dateAvailabilityResponses = availabilityTimeMapper.toDateAvailabilityResponses(meetingDates);
 
@@ -31,6 +37,7 @@ public class MeetingRoomMapper {
         meetingRoom.getTitle(),
         dates,
         participantCount,
+        participantInfoResponses,
         dateAvailabilityResponses
     );
   }

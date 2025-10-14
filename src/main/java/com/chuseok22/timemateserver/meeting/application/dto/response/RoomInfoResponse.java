@@ -9,6 +9,7 @@ public record RoomInfoResponse(
     String title,
     List<LocalDate> dates,
     int participantsCount,
+    List<ParticipantInfoResponse> participantInfoResponses,
     List<DateAvailabilityResponse> dateAvailabilityResponses
 ) {
 
