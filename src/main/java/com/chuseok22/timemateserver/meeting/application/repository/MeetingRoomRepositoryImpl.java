@@ -25,4 +25,15 @@ public class MeetingRoomRepositoryImpl implements MeetingRoomRepository {
     return jpaRepository.findById(id)
         .orElseThrow(() -> new CustomException(ErrorCode.MEETING_ROOM_NOT_FOUND));
   }
+
+  @Override
+  public MeetingRoom findByJoinCode(String joinCode) {
+    return jpaRepository.findByJoinCode(joinCode)
+        .orElseThrow(() -> new CustomException(ErrorCode.MEETING_ROOM_NOT_FOUND));
+  }
+
+  @Override
+  public boolean existsByJoinCode(String joinCode) {
+    return jpaRepository.existsByJoinCode(joinCode);
+  }
 }

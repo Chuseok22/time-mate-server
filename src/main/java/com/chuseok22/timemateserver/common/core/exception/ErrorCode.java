@@ -20,6 +20,10 @@ public enum ErrorCode {
 
   MEETING_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "Meeting Room을 찾을 수 없습니다."),
 
+  JOIN_CODE_DUPLICATE(HttpStatus.INTERNAL_SERVER_ERROR, "중복된 방 참가 코드입니다."),
+
+  BASE_58_JOIN_CODE_PATTERN_MISMATCH(HttpStatus.BAD_REQUEST, "방 참가 코드 형식이 잘못되었습니다."),
+
   // Meeting Date
 
   MEETING_DATE_NOT_FOUND(HttpStatus.NOT_FOUND, "Meeting Date를 찾을 수 없습니다."),

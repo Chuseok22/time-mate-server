@@ -8,4 +8,8 @@ public interface MeetingRoomRepository {
   MeetingRoom save(MeetingRoom meetingRoom);
 
   MeetingRoom findById(UUID id);
+
+  MeetingRoom findByJoinCode(String joinCode);
+
+  boolean existsByJoinCode(String joinCode);
 }
