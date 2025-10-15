@@ -3,6 +3,7 @@ package com.chuseok22.timemateserver.meeting.application.controller;
 import com.chuseok22.timemateserver.common.application.aop.LogMonitoringInvocation;
 import com.chuseok22.timemateserver.meeting.application.dto.request.CreateRoomRequest;
 import com.chuseok22.timemateserver.meeting.application.dto.response.RoomInfoResponse;
+import com.chuseok22.timemateserver.meeting.core.constant.JoinCodeAlphabet;
 import com.chuseok22.timemateserver.meeting.core.service.MeetingRoomService;
 import jakarta.validation.Valid;
 import java.util.UUID;
@@ -36,5 +37,14 @@ public class MeetingRoomController {
       @PathVariable(name = "room-id") UUID id
   ) {
     return ResponseEntity.ok(meetingRoomService.getRoomInfo(id));
+  }
+
+  @LogMonitoringInvocation
+  @GetMapping("/join-code/{join-code}")
+  public ResponseEntity<RoomInfoResponse> getRoomByJoinCode(
+      @PathVariable(name = "join-code") String joinCode
+  ) {
+    JoinCodeAlphabet.validateBase58Pattern(joinCode);
+    return ResponseEntity.ok(meetingRoomService.getRoomInfoByJoinCode(joinCode));
   }
 }

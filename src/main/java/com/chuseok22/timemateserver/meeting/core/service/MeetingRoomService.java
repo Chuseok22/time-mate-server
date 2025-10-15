@@ -9,4 +9,6 @@ public interface MeetingRoomService {
   RoomInfoResponse createRoom(CreateRoomRequest request);
 
   RoomInfoResponse getRoomInfo(UUID roomId);
+
+  RoomInfoResponse getRoomInfoByJoinCode(String joinCode);
 }
