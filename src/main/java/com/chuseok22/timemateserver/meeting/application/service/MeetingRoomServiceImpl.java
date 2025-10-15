@@ -11,7 +11,7 @@ import com.chuseok22.timemateserver.meeting.core.service.MeetingRoomService;
 import com.chuseok22.timemateserver.meeting.infrastructure.entity.MeetingDate;
 import com.chuseok22.timemateserver.meeting.infrastructure.entity.MeetingRoom;
 import com.chuseok22.timemateserver.meeting.infrastructure.properties.JoinCodeProperties;
-import com.chuseok22.timemateserver.meeting.infrastructure.util.JoinCodeGenerator;
+import com.chuseok22.timemateserver.meeting.infrastructure.util.JoinCodeUtil;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
   private final MeetingRoomRepository meetingRoomRepository;
   private final MeetingDateService meetingDateService;
   private final MeetingRoomMapper roomMapper;
-  private final JoinCodeGenerator joinCodeGenerator;
+  private final JoinCodeUtil joinCodeUtil;
   private final JoinCodeProperties joinCodeProperties;
 
   @Override
@@ -51,6 +51,7 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
   @Override
   @Transactional(readOnly = true)
   public RoomInfoResponse getRoomInfoByJoinCode(String joinCode) {
+    joinCodeUtil.validateBase58Pattern(joinCode);
     MeetingRoom meetingRoom = meetingRoomRepository.findByJoinCode(joinCode);
     List<MeetingDate> meetingDates = meetingDateService.getMeetingDates(meetingRoom);
     return roomMapper.toRoomInfoResponse(meetingRoom, meetingDates);
@@ -58,7 +59,7 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
 
   private String getUniqueJoinCode() {
     for (int i = 0; i < joinCodeProperties.maxRetries(); i++) {
-      String joinCode = joinCodeGenerator.generate();
+      String joinCode = joinCodeUtil.generate();
       boolean exists = meetingRoomRepository.existsByJoinCode(joinCode);
       if (exists) {
         continue;
