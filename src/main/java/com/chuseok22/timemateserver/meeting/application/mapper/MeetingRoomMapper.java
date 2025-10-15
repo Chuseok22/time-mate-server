@@ -35,6 +35,7 @@ public class MeetingRoomMapper {
     return new RoomInfoResponse(
         meetingRoom.getId(),
         meetingRoom.getTitle(),
+        meetingRoom.getJoinCode(),
         dates,
         participantCount,
         participantInfoResponses,

@@ -7,6 +7,7 @@ import java.util.UUID;
 public record RoomInfoResponse(
     UUID meetingRoomId,
     String title,
+    String joinCode,
     List<LocalDate> dates,
     int participantsCount,
     List<ParticipantInfoResponse> participantInfoResponses,

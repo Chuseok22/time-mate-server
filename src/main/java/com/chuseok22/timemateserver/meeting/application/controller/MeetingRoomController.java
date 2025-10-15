@@ -37,4 +37,12 @@ public class MeetingRoomController {
   ) {
     return ResponseEntity.ok(meetingRoomService.getRoomInfo(id));
   }
+
+  @LogMonitoringInvocation
+  @GetMapping("/join-code/{join-code}")
+  public ResponseEntity<RoomInfoResponse> getRoomByJoinCode(
+      @PathVariable(name = "join-code") String joinCode
+  ) {
+    return ResponseEntity.ok(meetingRoomService.getRoomInfoByJoinCode(joinCode));
+  }
 }
