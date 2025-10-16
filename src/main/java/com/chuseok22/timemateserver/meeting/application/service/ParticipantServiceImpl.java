@@ -55,7 +55,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 
   private void validatePassword(Participant participant, String password) {
     if (!CommonUtil.nvl(participant.getPassword(), "").isEmpty()) {
-      if (!participant.getPassword().equals(password.trim())) {
+      if (password == null || !participant.getPassword().equals(password.trim())) {
         log.error("사용자: {}의 비밀번호가 일치하지 않습니다.", participant.getId());
         throw new CustomException(ErrorCode.INVALID_PASSWORD);
       }
