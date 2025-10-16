@@ -10,6 +10,7 @@ import com.chuseok22.timemateserver.meeting.infrastructure.entity.AvailabilityTi
 import com.chuseok22.timemateserver.meeting.infrastructure.entity.MeetingDate;
 import com.chuseok22.timemateserver.meeting.infrastructure.entity.MeetingRoom;
 import com.chuseok22.timemateserver.meeting.infrastructure.entity.Participant;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +26,14 @@ public class AvailabilityTimeServiceImpl implements AvailabilityTimeService {
   private final AvailabilityTimeRepository availabilityTimeRepository;
   private final MeetingDateRepository meetingDateRepository;
   private final ParticipantRepository participantRepository;
+  private final EntityManager em;
 
   @Override
   @Transactional
   public void setAvailabilityTime(UpsertAvailabilityRequest request) {
     Participant participant = participantRepository.findById(request.getParticipantId());
     deleteAllByParticipant(participant);
+    em.flush();
     request.getAvailabilityTimeRequests()
         .forEach(req -> saveAvailabilityTimes(participant, req));
   }
