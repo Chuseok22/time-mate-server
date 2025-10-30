@@ -51,6 +51,9 @@ dependencies {
 
     // AOP
     implementation 'org.springframework:spring-aop:6.2.9'
+
+    // OkHttp
+    implementation 'com.squareup.okhttp3:okhttp:5.2.1'
 }
 
 tasks.named('test') {
