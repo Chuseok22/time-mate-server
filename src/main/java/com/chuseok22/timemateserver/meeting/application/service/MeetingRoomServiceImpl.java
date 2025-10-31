@@ -1,5 +1,6 @@
 package com.chuseok22.timemateserver.meeting.application.service;
 
+import com.chuseok22.timemateserver.admin.core.service.AdminNotifier;
 import com.chuseok22.timemateserver.common.core.exception.CustomException;
 import com.chuseok22.timemateserver.common.core.exception.ErrorCode;
 import com.chuseok22.timemateserver.meeting.application.dto.request.CreateRoomRequest;
@@ -29,6 +30,7 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
   private final MeetingRoomMapper roomMapper;
   private final JoinCodeUtil joinCodeUtil;
   private final JoinCodeProperties joinCodeProperties;
+  private final AdminNotifier adminNotifier;
 
   @Override
   @Transactional
@@ -37,6 +39,7 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
     MeetingRoom meetingRoom = MeetingRoom.create(request.getTitle(), joinCode);
     MeetingRoom savedRoom = meetingRoomRepository.save(meetingRoom);
     List<MeetingDate> meetingDates = meetingDateService.createDate(savedRoom, request.getDates());
+    adminNotifier.notifyRoomCreated(meetingRoom.getTitle());
     return roomMapper.toRoomInfoResponse(savedRoom, meetingDates);
   }
 
