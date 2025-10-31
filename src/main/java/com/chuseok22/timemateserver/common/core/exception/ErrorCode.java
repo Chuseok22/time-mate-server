@@ -39,6 +39,10 @@ public enum ErrorCode {
   DUPLICATE_USERNAME(HttpStatus.CONFLICT, "이미 존재하는 이름입니다."),
 
   INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
+
+  // Telegram
+
+  TELEGRAM_MESSAGE_SEND_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "텔레그램 메시지 발송 실패"),
   ;
 
   private final HttpStatus status;
