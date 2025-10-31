@@ -195,7 +195,7 @@ jobs:
             ACTIVE_PORT=$(
               sudo awk -v dom="${DOMAIN}" '
                 BEGIN{inserver=0; brace=0}
-                dom_esc = dom; gsub(/\./, "\\.", dom_esc);
+                dom_esc = dom; gsub(/[.[\]()+*?^$\\|]/, "\\\\&", dom_esc);
                 $0 ~ "server_name[[:space:]]+"dom_esc"[[:space:]]*;" {inserver=1}
                 inserver {
                   if (index($0,"{")) brace += gsub(/\{/,"{")
