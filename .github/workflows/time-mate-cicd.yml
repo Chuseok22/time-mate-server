@@ -166,6 +166,8 @@ jobs:
               if [ "${HEALTH_OK:-0}" != "1" ]; then
                 echo "[오류] 헬스체크 실패 -> 배포 중단, 로그 출력"
                 echo "$PW" | sudo -S docker logs --tail=200 ${CONTAINER_NAME}
+                echo "배포 실패로 인한 컨테이너 정리 중..."
+                echo "$PW" | sudo -S docker rm -f ${CONTAINER_NAME} || true
                 exit 1
               fi
             
@@ -261,18 +263,39 @@ jobs:
             
             echo "[main] DSM 리버스프록시 대상 토글 (${ACTIVE_PORT} -> ${PORT})"
             TMP_FILE="$(mktemp)"
-            sudo awk -v dom="${DOMAIN}" -v port_blue="${BLUE_PORT}" -v port_green="${GREEN_PORT}" -v new_port="${PORT}" '
-              BEGIN{inserver=0; brace=0}
+            sudo awk -v dom="${DOMAIN}" -v new_port="${PORT}" '
+              BEGIN {
+                inserver=0; depth=0; entry_depth=0;
+                # 모든 정규식 메타문자 이스케이프(방탄)
+                dom_esc = dom;
+                gsub(/[.[\]()+*?^$\\|]/, "\\\\&", dom_esc);
+              }
               {
-                if ($0 ~ "server_name[[:space:]]+"dom"[[:space:]]*;") { inserver=1 }
-                if (inserver) {
-                  if (index($0,"{")) brace += gsub(/\{/,"{")
-                  if (index($0,"}")) brace -= gsub(/\}/,"}")
-                  # proxy_pass http(s)://(localhost|127.0.0.1):(BLUE_PORT|GREEN_PORT)
-                  gsub("(proxy_pass[[:space:]]+https?://(localhost|127\\.0\\.0\\.1):)(" port_blue "|" port_green ")", "\\1" new_port)
-                  if (brace==0) inserver=0
+                # server_name 매칭 시 현재 depth 기록
+                if ($0 ~ "server_name[[:space:]]+" dom_esc "[[:space:]]*;") {
+                  inserver=1;
+                  entry_depth=depth;
                 }
-                print
+
+                # 주석 제거 후 중괄호 추적(주석 내 { } 무시)
+                line = $0;
+                sub(/#.*/, "", line);
+                depth += gsub(/\{/, "{", line);
+                depth -= gsub(/\}/, "}", line);
+
+                # 타겟 서버 블록 내부 & proxy_pass가 localhost/127.0.0.1:포트면 포트만 치환
+                if (inserver && \
+                    $0 !~ /^[[:space:]]*#/ && \
+                    $0 ~ /proxy_pass[[:space:]]+https?:\/\/(localhost|127\.0\.0\.1):[0-9]{2,5}/) {
+                  sub(/:[0-9]{2,5}/, ":" new_port);
+                }
+
+                print;
+
+                # 종료 조건(일반 케이스 + 단일 라인 server 블록)
+                if (inserver && (depth < entry_depth || (depth == 0 && entry_depth == 0))) {
+                  inserver=0;
+                }
               }
             ' "${NGINX_RP_CONF}" > "${TMP_FILE}"
             
@@ -285,6 +308,8 @@ jobs:
               echo "[main] nginx 파일 복구 완료 - 백업 파일 삭제: ${BACKUP_FILE}"
               echo "$PW" | sudo -S rm -f "${BACKUP_FILE}"
               rm -f "${TMP_FILE}"
+              echo "[오류] 포트: ${PORT} 대상 컨테이너: ${CONTAINER_NAME} 삭제"
+              echo "$PW" | sudo -S docker rm -f "${CONTAINER_NAME}" || true
               exit 1
             fi
             echo "nginx 설정 파일 검증 성공"
@@ -299,6 +324,8 @@ jobs:
                 echo "$PW" | sudo -S systemctl restart nginx
                 echo "[main] nginx 파일 복구 완료 - 백업 파일 삭제: ${BACKUP_FILE}"
                 echo "$PW" | sudo -S rm -f "${BACKUP_FILE}"
+                echo "[오류] 포트: ${PORT} 대상 컨테이너: ${CONTAINER_NAME} 삭제"
+                echo "$PW" | sudo -S docker rm -f "${CONTAINER_NAME}" || true
                 exit 1
               fi
             fi
