@@ -25,16 +25,16 @@ public class ParticipantController implements ParticipantControllerDocs {
 
   private final ParticipantService participantService;
 
-  @PostMapping("")
   @LogMonitoringInvocation
+  @PostMapping("")
   public ResponseEntity<ParticipantInfoResponse> createParticipant(
       @Valid @RequestBody ParticipantLoginRequest request
   ) {
     return ResponseEntity.ok(participantService.loginParticipant(request));
   }
 
-  @GetMapping("{participant-id}")
   @LogMonitoringInvocation
+  @GetMapping("{participant-id}")
   public ResponseEntity<ParticipantInfoResponse> getParticipant(
       @NotNull @PathVariable(name = "participant-id") UUID participantId
   ) {
