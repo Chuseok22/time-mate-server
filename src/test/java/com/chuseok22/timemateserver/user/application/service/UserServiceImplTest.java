@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
@@ -112,8 +113,11 @@ class UserServiceImplTest {
         .willThrow(new CustomException(ErrorCode.USER_NOT_FOUND));
 
     // when / then
+    // CustomException의 errorCode 필드까지 검증하여 정확한 에러 종류 확인
     assertThatThrownBy(() -> userService.getUserInfo(userId))
-        .isInstanceOf(CustomException.class);
+        .isInstanceOf(CustomException.class)
+        .extracting("errorCode")
+        .isEqualTo(ErrorCode.USER_NOT_FOUND);
   }
 
   // ─────────────────────────────────────────────
@@ -197,31 +201,29 @@ class UserServiceImplTest {
   void getUserRooms_sameRoomCreatedAndParticipated_deduplicates() {
     // given
     UUID userId = UUID.randomUUID();
+    // 고정 UUID를 주입하여 ID 기반 중복 제거를 명확히 검증
+    UUID roomId = UUID.randomUUID();
+    MeetingRoom room = mock(MeetingRoom.class);
+    given(room.getId()).willReturn(roomId);
 
-    // 동일한 room 객체를 createdRooms, participatedRooms 양쪽에 모두 사용
-    MeetingRoom room = MeetingRoom.builder()
-        .title("내가 만들고 참가한 방")
-        .joinCode("SAME01")
-        .creatorUserId(userId)
-        .build();
     Participant participant = Participant.builder()
         .meetingRoom(room)
         .username("홍길동")
         .userId(userId)
         .build();
     UserRoomResponse expectedResponse = new UserRoomResponse(
-        UUID.randomUUID(), "내가 만들고 참가한 방", "SAME01", true);
+        roomId, "내가 만들고 참가한 방", "SAME01", true);
 
     given(meetingRoomRepository.findAllByCreatorUserId(userId)).willReturn(List.of(room));
     given(participantRepository.findAllByUserId(userId)).willReturn(List.of(participant));
-    // 동일 객체이므로 mapper 호출은 1번만 발생
+    // 동일 roomId를 가진 방이므로 mapper 호출은 1번만 발생
     given(userMapper.toUserRoomResponse(room, userId)).willReturn(expectedResponse);
 
     // when
     List<UserRoomResponse> result = userService.getUserRooms(userId);
 
     // then
-    // room.getId()가 null이므로 seen Set에 null이 한 번만 추가됨 → 중복 제거
+    // 동일 UUID를 가진 방은 seen Set에서 중복 제거되어 1건만 반환되어야 함
     assertThat(result).hasSize(1);
     verify(userMapper).toUserRoomResponse(room, userId);
   }
