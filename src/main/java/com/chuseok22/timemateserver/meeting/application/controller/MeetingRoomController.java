@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,5 +46,13 @@ public class MeetingRoomController implements MeetingRoomControllerDocs {
       @PathVariable(name = "join-code") String joinCode
   ) {
     return ResponseEntity.ok(meetingRoomService.getRoomInfoByJoinCode(joinCode));
+  }
+
+  @LogMonitoringInvocation
+  @DeleteMapping("/{room-id}")
+  public ResponseEntity<Void> deleteRoom(
+      @PathVariable(name = "room-id") UUID roomId) {
+    meetingRoomService.deleteRoom(roomId);
+    return ResponseEntity.noContent().build();
   }
 }

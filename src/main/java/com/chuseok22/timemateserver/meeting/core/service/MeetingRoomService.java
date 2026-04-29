@@ -11,4 +11,6 @@ public interface MeetingRoomService {
   RoomInfoResponse getRoomInfo(UUID roomId);
 
   RoomInfoResponse getRoomInfoByJoinCode(String joinCode);
+
+  void deleteRoom(UUID roomId);
 }

@@ -125,4 +125,28 @@ public interface MeetingRoomControllerDocs {
   ResponseEntity<RoomInfoResponse> getRoomByJoinCode(
       @Parameter(description = "참가자 초대용 방 코드", required = true) String joinCode
   );
+
+  @ApiChangeLogs({
+      @ApiChangeLog(
+          date = "2026-04-30",
+          author = "Chuseok22",
+          description = "방 삭제 API 추가 (방장 전용)",
+          issueUrl = "https://github.com/Chuseok22/time-mate-server/issues/33"
+      )
+  })
+  @Operation(
+      summary = "방 삭제",
+      description = """
+          ### 요청 파라미터
+          - `room-id` (UUID, 필수): 삭제할 방 ID
+
+          ### 유의 사항
+          - 방을 만든 로그인 사용자만 삭제 가능
+          - 방 전체 삭제 (참가자, 투표 포함). 복구 불가
+          - 방장이 아닌 경우 403 ROOM_DELETE_FORBIDDEN 반환
+          - Guest가 만든 방은 삭제 불가
+          """
+  )
+  ResponseEntity<Void> deleteRoom(
+      @Parameter(description = "방 ID", required = true) UUID roomId);
 }

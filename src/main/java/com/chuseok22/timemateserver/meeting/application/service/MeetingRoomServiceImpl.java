@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +39,9 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
   @Transactional
   public RoomInfoResponse createRoom(CreateRoomRequest request) {
     String joinCode = getUniqueJoinCode();
-    MeetingRoom meetingRoom = MeetingRoom.create(request.getTitle(), joinCode);
+    // 로그인 사용자가 방을 만들면 소유권 부여
+    UUID creatorUserId = getAuthenticatedUserId();
+    MeetingRoom meetingRoom = MeetingRoom.create(request.getTitle(), joinCode, creatorUserId);
     MeetingRoom savedRoom = meetingRoomRepository.save(meetingRoom);
     List<MeetingDate> meetingDates = meetingDateService.createDate(savedRoom, request.getDates());
     adminNotifier.notifyRoomCreated(meetingRoom.getTitle());
@@ -58,6 +63,29 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
     MeetingRoom meetingRoom = meetingRoomRepository.findByJoinCode(joinCode);
     List<MeetingDate> meetingDates = meetingDateService.getMeetingDates(meetingRoom);
     return roomMapper.toRoomInfoResponse(meetingRoom, meetingDates);
+  }
+
+  @Override
+  @Transactional
+  public void deleteRoom(UUID roomId) {
+    UUID authenticatedUserId = getAuthenticatedUserId();
+    MeetingRoom room = meetingRoomRepository.findById(roomId);
+
+    // 비인증 상태이거나 방장이 아닌 경우 삭제 금지
+    if (authenticatedUserId == null || !authenticatedUserId.equals(room.getCreatorUserId())) {
+      log.warn("방 삭제 권한 없음: roomId={}, requestUserId={}", roomId, authenticatedUserId);
+      throw new CustomException(ErrorCode.ROOM_DELETE_FORBIDDEN);
+    }
+    meetingRoomRepository.deleteById(roomId);
+  }
+
+  private UUID getAuthenticatedUserId() {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (auth instanceof UsernamePasswordAuthenticationToken
+        && auth.getPrincipal() instanceof UUID userId) {
+      return userId;
+    }
+    return null;
   }
 
   private String getUniqueJoinCode() {
