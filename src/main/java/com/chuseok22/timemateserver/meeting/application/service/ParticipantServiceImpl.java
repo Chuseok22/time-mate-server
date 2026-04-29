@@ -64,7 +64,8 @@ public class ParticipantServiceImpl implements ParticipantService {
     UUID authenticatedUserId = getAuthenticatedUserId();
     Participant participant = participantRepository.findById(participantId);
 
-    if (!authenticatedUserId.equals(participant.getUserId())) {
+    // 비인증 상태이거나 본인이 아닌 경우 삭제 금지
+    if (authenticatedUserId == null || !authenticatedUserId.equals(participant.getUserId())) {
       log.warn("참가자 삭제 권한 없음: participantId={}, requestUserId={}", participantId, authenticatedUserId);
       throw new CustomException(ErrorCode.PARTICIPANT_DELETE_FORBIDDEN);
     }
