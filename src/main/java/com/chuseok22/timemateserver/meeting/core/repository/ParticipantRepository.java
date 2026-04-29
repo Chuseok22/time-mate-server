@@ -16,4 +16,7 @@ public interface ParticipantRepository {
   Participant findByMeetingRoomAndUsername(MeetingRoom meetingRoom, String username);
 
   List<Participant> findAllByMeetingRoom(MeetingRoom meetingRoom);
+
+  // 특정 소셜 사용자가 참가한 방의 Participant 목록 조회
+  List<Participant> findAllByUserId(UUID userId);
 }

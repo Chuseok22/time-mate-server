@@ -38,6 +38,10 @@ public class Participant extends BasePostgresEntity {
 
   private String password;
 
+  // 소셜 로그인 사용자와 연결된 경우의 user_id (비회원이면 NULL)
+  @Column(name = "user_id")
+  private UUID userId;
+
   public static Participant create(MeetingRoom room, String username, String password) {
     return Participant.builder()
         .meetingRoom(room)

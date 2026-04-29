@@ -5,6 +5,7 @@ import com.chuseok22.timemateserver.common.core.exception.ErrorCode;
 import com.chuseok22.timemateserver.meeting.core.repository.MeetingRoomRepository;
 import com.chuseok22.timemateserver.meeting.infrastructure.entity.MeetingRoom;
 import com.chuseok22.timemateserver.meeting.infrastructure.repository.MeetingRoomJpaRepository;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -35,5 +36,11 @@ public class MeetingRoomRepositoryImpl implements MeetingRoomRepository {
   @Override
   public boolean existsByJoinCode(String joinCode) {
     return jpaRepository.existsByJoinCode(joinCode);
+  }
+
+  // TODO: Task 9에서 JPA 쿼리 메서드로 완전 구현 예정
+  @Override
+  public List<MeetingRoom> findAllByCreatorUserId(UUID creatorUserId) {
+    return jpaRepository.findAllByCreatorUserId(creatorUserId);
   }
 }

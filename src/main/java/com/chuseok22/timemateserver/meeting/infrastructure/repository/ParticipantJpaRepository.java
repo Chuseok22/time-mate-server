@@ -11,4 +11,7 @@ public interface ParticipantJpaRepository extends JpaRepository<Participant, UUI
   List<Participant> findAllByMeetingRoom(MeetingRoom meetingRoom);
 
   Participant findByMeetingRoomAndUsername(MeetingRoom meetingRoom, String username);
+
+  // userId로 참가한 방의 Participant 목록 조회
+  List<Participant> findAllByUserId(UUID userId);
 }

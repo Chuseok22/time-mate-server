@@ -33,6 +33,10 @@ public class MeetingRoom extends BasePostgresEntity {
   @Column(name = "join_code", nullable = false, unique = true, length = 16)
   private String joinCode;
 
+  // 방을 생성한 소셜 로그인 사용자 ID (NULL이면 비회원 생성)
+  @Column(name = "creator_user_id")
+  private UUID creatorUserId;
+
   public static MeetingRoom create(String title, String joinCode) {
     return MeetingRoom.builder()
         .title(title)
