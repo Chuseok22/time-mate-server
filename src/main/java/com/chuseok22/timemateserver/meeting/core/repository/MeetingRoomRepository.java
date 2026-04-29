@@ -16,4 +16,6 @@ public interface MeetingRoomRepository {
 
   // 특정 소셜 사용자가 생성한 방 목록 조회
   List<MeetingRoom> findAllByCreatorUserId(UUID creatorUserId);
+
+  void deleteById(UUID id);
 }

@@ -43,4 +43,13 @@ public class MeetingRoom extends BasePostgresEntity {
         .joinCode(joinCode)
         .build();
   }
+
+  // 소셜 로그인 사용자가 방을 생성할 때 사용
+  public static MeetingRoom create(String title, String joinCode, UUID creatorUserId) {
+    return MeetingRoom.builder()
+        .title(title)
+        .joinCode(joinCode)
+        .creatorUserId(creatorUserId)
+        .build();
+  }
 }

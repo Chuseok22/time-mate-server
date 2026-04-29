@@ -38,9 +38,17 @@ public class MeetingRoomRepositoryImpl implements MeetingRoomRepository {
     return jpaRepository.existsByJoinCode(joinCode);
   }
 
-  // TODO: Task 9에서 JPA 쿼리 메서드로 완전 구현 예정
   @Override
   public List<MeetingRoom> findAllByCreatorUserId(UUID creatorUserId) {
     return jpaRepository.findAllByCreatorUserId(creatorUserId);
+  }
+
+  @Override
+  public void deleteById(UUID id) {
+    // 존재 여부 확인 후 삭제 (없으면 예외 발생)
+    if (!jpaRepository.existsById(id)) {
+      throw new CustomException(ErrorCode.MEETING_ROOM_NOT_FOUND);
+    }
+    jpaRepository.deleteById(id);
   }
 }
