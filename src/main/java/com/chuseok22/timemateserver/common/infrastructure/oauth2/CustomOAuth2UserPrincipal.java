@@ -25,7 +25,8 @@ public class CustomOAuth2UserPrincipal implements OAuth2User {
 
   @Override
   public Map<String, Object> getAttributes() {
-    return attributes;
+    // 외부에서 내부 상태를 변경할 수 없도록 방어 복사 반환
+    return Map.copyOf(attributes);
   }
 
   @Override

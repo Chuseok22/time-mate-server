@@ -1,6 +1,8 @@
 package com.chuseok22.timemateserver.common.infrastructure.oauth2;
 
 import java.util.Map;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
 
 public class KakaoOAuth2UserInfo implements OAuth2UserInfo {
 
@@ -17,7 +19,18 @@ public class KakaoOAuth2UserInfo implements OAuth2UserInfo {
 
   @Override
   public String getProviderId() {
-    return String.valueOf(attributes.get("id"));
+    Object id = attributes.get("id");
+    // 카카오 응답에 사용자 ID가 없는 경우 OAuth2 인증 예외로 처리
+    if (id == null) {
+      throw new OAuth2AuthenticationException(
+          new OAuth2Error(
+              "missing_provider_id",
+              "카카오 사용자 ID를 찾을 수 없습니다",
+              null
+          )
+      );
+    }
+    return String.valueOf(id);
   }
 
   @SuppressWarnings("unchecked")

@@ -3,8 +3,10 @@ package com.chuseok22.timemateserver.common.infrastructure.config;
 import com.chuseok22.timemateserver.common.infrastructure.filter.JwtAuthenticationFilter;
 import com.chuseok22.timemateserver.common.infrastructure.oauth2.CustomOAuth2UserService;
 import com.chuseok22.timemateserver.common.infrastructure.oauth2.OAuth2AuthenticationSuccessHandler;
+import com.chuseok22.timemateserver.common.infrastructure.properties.AppProperties;
 import com.chuseok22.timemateserver.common.infrastructure.util.JwtProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -17,6 +19,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -27,6 +30,7 @@ public class SecurityConfig {
   private final JwtProvider jwtProvider;
   private final CustomOAuth2UserService customOAuth2UserService;
   private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+  private final AppProperties appProperties;
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -49,6 +53,11 @@ public class SecurityConfig {
         .oauth2Login(oauth2 -> oauth2
             .userInfoEndpoint(ui -> ui.userService(customOAuth2UserService))
             .successHandler(oAuth2AuthenticationSuccessHandler)
+            // OAuth2 인증 실패 시 프론트엔드 에러 페이지로 리다이렉트
+            .failureHandler((request, response, exception) -> {
+              log.warn("OAuth2 인증 실패: {}", exception.getMessage());
+              response.sendRedirect(appProperties.frontendUrl() + "/login?error=oauth2_failed");
+            })
         )
         .addFilterBefore(new JwtAuthenticationFilter(jwtProvider),
             UsernamePasswordAuthenticationFilter.class);
