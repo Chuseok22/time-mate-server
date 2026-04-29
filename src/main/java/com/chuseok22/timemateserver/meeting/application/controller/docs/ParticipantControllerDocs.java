@@ -69,4 +69,27 @@ public interface ParticipantControllerDocs {
   ResponseEntity<ParticipantInfoResponse> getParticipant(
       @Parameter(description = "참가자 ID", required = true) UUID participantId
   );
+
+  @ApiChangeLogs({
+      @ApiChangeLog(
+          date = "2026-04-30",
+          author = "Chuseok22",
+          description = "방 탈퇴 API 추가 (본인 전용)",
+          issueUrl = "https://github.com/Chuseok22/time-mate-server/issues/33"
+      )
+  })
+  @Operation(
+      summary = "방 탈퇴",
+      description = """
+          ### 요청 파라미터
+          - `participant-id` (UUID, 필수): 탈퇴할 참가자 ID
+
+          ### 유의 사항
+          - 본인 참가 기록만 삭제 가능 (userId 일치 확인)
+          - Guest 참가자는 탈퇴 불가 (userId가 없으므로 403 반환)
+          - 투표 기록 포함 삭제
+          """
+  )
+  ResponseEntity<Void> deleteParticipant(
+      @Parameter(description = "참가자 ID", required = true) UUID participantId);
 }
