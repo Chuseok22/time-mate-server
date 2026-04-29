@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
@@ -44,8 +45,9 @@ public class MeetingRoomRepositoryImpl implements MeetingRoomRepository {
   }
 
   @Override
+  @Transactional
   public void deleteById(UUID id) {
-    // 존재 여부 확인 후 삭제 (없으면 예외 발생)
+    // 존재 여부 확인과 삭제를 하나의 트랜잭션으로 묶어 TOCTOU 경쟁 조건 방지
     if (!jpaRepository.existsById(id)) {
       throw new CustomException(ErrorCode.MEETING_ROOM_NOT_FOUND);
     }

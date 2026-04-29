@@ -22,16 +22,16 @@ public class UserController implements UserControllerDocs {
   private final UserService userService;
 
   // JWT 인증 후 SecurityContext의 principal(userId)을 기반으로 내 정보 조회
-  @GetMapping("/me")
   @LogMonitoringInvocation
+  @GetMapping("/me")
   public ResponseEntity<UserInfoResponse> getMyInfo(Authentication authentication) {
     UUID userId = (UUID) authentication.getPrincipal();
     return ResponseEntity.ok(userService.getUserInfo(userId));
   }
 
   // JWT 인증 후 SecurityContext의 principal(userId)을 기반으로 참여 방 목록 조회
-  @GetMapping("/me/rooms")
   @LogMonitoringInvocation
+  @GetMapping("/me/rooms")
   public ResponseEntity<List<UserRoomResponse>> getMyRooms(Authentication authentication) {
     UUID userId = (UUID) authentication.getPrincipal();
     return ResponseEntity.ok(userService.getUserRooms(userId));
