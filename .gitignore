@@ -40,3 +40,6 @@ out/
 application-*.yml
 
 TODO.md
+.report
+.issue
+docs
