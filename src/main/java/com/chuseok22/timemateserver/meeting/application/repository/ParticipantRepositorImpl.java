@@ -43,9 +43,18 @@ public class ParticipantRepositorImpl implements ParticipantRepository {
     return jpaRepository.findAllByMeetingRoom(meetingRoom);
   }
 
-  // TODO: Task 10에서 JPA 쿼리 메서드로 완전 구현 예정
   @Override
   public List<Participant> findAllByUserId(UUID userId) {
     return jpaRepository.findAllByUserId(userId);
+  }
+
+  @Override
+  public Participant findByMeetingRoomAndUserId(MeetingRoom meetingRoom, UUID userId) {
+    return jpaRepository.findByMeetingRoomAndUserId(meetingRoom, userId);
+  }
+
+  @Override
+  public void deleteById(UUID participantId) {
+    jpaRepository.deleteById(participantId);
   }
 }

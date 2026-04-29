@@ -14,4 +14,6 @@ public interface ParticipantService {
   ParticipantInfoResponse getParticipantInfo(UUID participantId);
 
   List<Participant> findAllByMeetingRoom(MeetingRoom meetingRoom);
+
+  void deleteParticipant(UUID participantId);
 }

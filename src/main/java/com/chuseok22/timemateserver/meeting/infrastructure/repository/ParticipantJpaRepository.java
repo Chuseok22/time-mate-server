@@ -16,4 +16,7 @@ public interface ParticipantJpaRepository extends JpaRepository<Participant, UUI
   // userId로 참가한 방의 Participant 목록 조회 — meetingRoom LAZY 로딩 N+1 방지
   @EntityGraph(attributePaths = "meetingRoom")
   List<Participant> findAllByUserId(UUID userId);
+
+  // 특정 방에서 특정 userId를 가진 참가자 단건 조회
+  Participant findByMeetingRoomAndUserId(MeetingRoom meetingRoom, UUID userId);
 }

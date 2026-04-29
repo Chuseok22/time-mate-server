@@ -49,4 +49,13 @@ public class Participant extends BasePostgresEntity {
         .password(CommonUtil.nvl(password, "").isEmpty() ? null : password)
         .build();
   }
+
+  // 로그인 사용자 전용 생성 — 비밀번호 없이 userId로 참가자 생성
+  public static Participant createForUser(MeetingRoom room, String username, UUID userId) {
+    return Participant.builder()
+        .meetingRoom(room)
+        .username(username.trim())
+        .userId(userId)
+        .build();
+  }
 }
