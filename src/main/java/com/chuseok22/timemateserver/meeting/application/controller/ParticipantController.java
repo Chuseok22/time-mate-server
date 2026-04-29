@@ -1,6 +1,7 @@
 package com.chuseok22.timemateserver.meeting.application.controller;
 
 import com.chuseok22.timemateserver.common.application.aop.LogMonitoringInvocation;
+import com.chuseok22.timemateserver.meeting.application.controller.docs.ParticipantControllerDocs;
 import com.chuseok22.timemateserver.meeting.application.dto.request.ParticipantLoginRequest;
 import com.chuseok22.timemateserver.meeting.application.dto.response.ParticipantInfoResponse;
 import com.chuseok22.timemateserver.meeting.core.service.ParticipantService;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/participant")
 @RequiredArgsConstructor
-public class ParticipantController {
+public class ParticipantController implements ParticipantControllerDocs {
 
   private final ParticipantService participantService;
 
