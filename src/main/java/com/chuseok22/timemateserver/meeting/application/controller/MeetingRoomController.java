@@ -1,7 +1,6 @@
 package com.chuseok22.timemateserver.meeting.application.controller;
 
 import com.chuseok22.timemateserver.common.application.aop.LogMonitoringInvocation;
-import com.chuseok22.timemateserver.meeting.application.controller.docs.MeetingRoomControllerDocs;
 import com.chuseok22.timemateserver.meeting.application.dto.request.CreateRoomRequest;
 import com.chuseok22.timemateserver.meeting.application.dto.response.RoomInfoResponse;
 import com.chuseok22.timemateserver.meeting.core.service.MeetingRoomService;

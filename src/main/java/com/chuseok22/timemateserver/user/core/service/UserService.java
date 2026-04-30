@@ -14,4 +14,6 @@ public interface UserService {
   UserInfoResponse getUserInfo(UUID userId);
 
   List<UserRoomResponse> getUserRooms(UUID userId);
+
+  void deleteUser(UUID userId);
 }

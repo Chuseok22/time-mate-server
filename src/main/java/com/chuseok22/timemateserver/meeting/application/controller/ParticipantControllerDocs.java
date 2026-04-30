@@ -1,13 +1,13 @@
-package com.chuseok22.timemateserver.meeting.application.controller.docs;
+package com.chuseok22.timemateserver.meeting.application.controller;
 
+import com.chuseok22.apichangelog.annotation.ApiChangeLog;
+import com.chuseok22.apichangelog.annotation.ApiChangeLogs;
 import com.chuseok22.timemateserver.meeting.application.dto.request.ParticipantLoginRequest;
 import com.chuseok22.timemateserver.meeting.application.dto.response.ParticipantInfoResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.UUID;
-import com.chuseok22.apichangelog.annotation.ApiChangeLog;
-import com.chuseok22.apichangelog.annotation.ApiChangeLogs;
 import org.springframework.http.ResponseEntity;
 
 @Tag(name = "참가자", description = "참가자 로그인 및 조회 API")
