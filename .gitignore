@@ -39,6 +39,8 @@ out/
 ### application.yml ###
 application-*.yml
 
+src/main/resources/firebase-adminsdk.json
+
 TODO.md
 .report
 .issue
