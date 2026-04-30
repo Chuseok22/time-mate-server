@@ -1,7 +1,6 @@
 package com.chuseok22.timemateserver.user.application.controller;
 
 import com.chuseok22.timemateserver.common.application.aop.LogMonitoringInvocation;
-import com.chuseok22.timemateserver.user.application.controller.docs.UserControllerDocs;
 import com.chuseok22.timemateserver.user.application.dto.response.UserInfoResponse;
 import com.chuseok22.timemateserver.user.application.dto.response.UserRoomResponse;
 import com.chuseok22.timemateserver.user.core.service.UserService;

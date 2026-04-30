@@ -1,4 +1,4 @@
-package com.chuseok22.timemateserver.user.application.controller.docs;
+package com.chuseok22.timemateserver.user.application.controller;
 
 import com.chuseok22.apichangelog.annotation.ApiChangeLog;
 import com.chuseok22.apichangelog.annotation.ApiChangeLogs;
