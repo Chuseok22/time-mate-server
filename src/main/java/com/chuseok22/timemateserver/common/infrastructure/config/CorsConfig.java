@@ -28,6 +28,8 @@ public class CorsConfig {
       "http://localhost:3000", // 로컬 웹 서버
       "https://localhost:3000",
       "http://localhost:3001", // 채팅 테스트 전용 로컬 웹 서버
+      "http://localhost:5173", // Vite 기본 포트
+      "https://localhost:5173",
 
       "http://10.*:*", // 10.0.0.0/8
       "http://172.*:*", // 172.16.0.0/12 전체 (16~31)
