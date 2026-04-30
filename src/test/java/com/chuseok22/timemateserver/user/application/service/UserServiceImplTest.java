@@ -6,10 +6,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.chuseok22.timemateserver.common.core.exception.CustomException;
 import com.chuseok22.timemateserver.common.core.exception.ErrorCode;
+import com.chuseok22.timemateserver.meeting.core.repository.AvailabilityTimeRepository;
 import com.chuseok22.timemateserver.meeting.core.repository.MeetingRoomRepository;
 import com.chuseok22.timemateserver.meeting.core.repository.ParticipantRepository;
 import com.chuseok22.timemateserver.meeting.infrastructure.entity.MeetingRoom;
@@ -38,6 +40,8 @@ class UserServiceImplTest {
   private MeetingRoomRepository meetingRoomRepository;
   @Mock
   private ParticipantRepository participantRepository;
+  @Mock
+  private AvailabilityTimeRepository availabilityTimeRepository;
   @Mock
   private UserMapper userMapper;
 
@@ -226,5 +230,70 @@ class UserServiceImplTest {
     // 동일 UUID를 가진 방은 seen Set에서 중복 제거되어 1건만 반환되어야 함
     assertThat(result).hasSize(1);
     verify(userMapper).toUserRoomResponse(room, userId);
+  }
+
+  // ─────────────────────────────────────────────
+  // deleteUser 테스트
+  // ─────────────────────────────────────────────
+
+  @Test
+  @DisplayName("참가자 기록이 있는 사용자 탈퇴 시 가용시간·참가자·유저 순서로 삭제")
+  void deleteUser_withParticipants_deletesInOrder() {
+    //given
+    UUID userId = UUID.randomUUID();
+    User user = User.create("google", "google-123", "홍길동", "test@gmail.com");
+
+    MeetingRoom room = MeetingRoom.builder().title("방").joinCode("AB1-CD2").build();
+    UUID p1Id = UUID.randomUUID();
+    UUID p2Id = UUID.randomUUID();
+    Participant participant1 = Participant.builder().id(p1Id).meetingRoom(room).username("홍길동").userId(userId).build();
+    Participant participant2 = Participant.builder().id(p2Id).meetingRoom(room).username("홍길동2").userId(userId).build();
+
+    given(userRepository.findById(userId)).willReturn(user);
+    given(participantRepository.findAllByUserId(userId)).willReturn(List.of(participant1, participant2));
+
+    //when
+    userService.deleteUser(userId);
+
+    //then
+    verify(availabilityTimeRepository, times(2)).deleteAllByParticipant(any(Participant.class));
+    verify(participantRepository, times(2)).deleteById(any(UUID.class));
+    verify(userRepository).deleteById(userId);
+  }
+
+  @Test
+  @DisplayName("참가자 기록이 없는 사용자 탈퇴 시 유저만 삭제")
+  void deleteUser_noParticipants_deletesUserOnly() {
+    //given
+    UUID userId = UUID.randomUUID();
+    User user = User.create("google", "google-123", "홍길동", "test@gmail.com");
+
+    given(userRepository.findById(userId)).willReturn(user);
+    given(participantRepository.findAllByUserId(userId)).willReturn(List.of());
+
+    //when
+    userService.deleteUser(userId);
+
+    //then
+    verify(availabilityTimeRepository, never()).deleteAllByParticipant(any());
+    verify(participantRepository, never()).deleteById(any());
+    verify(userRepository).deleteById(userId);
+  }
+
+  @Test
+  @DisplayName("존재하지 않는 userId로 탈퇴 시 USER_NOT_FOUND 예외 발생")
+  void deleteUser_userNotFound_throwsCustomException() {
+    //given
+    UUID userId = UUID.randomUUID();
+    given(userRepository.findById(userId))
+        .willThrow(new CustomException(ErrorCode.USER_NOT_FOUND));
+
+    //when / then
+    assertThatThrownBy(() -> userService.deleteUser(userId))
+        .isInstanceOf(CustomException.class)
+        .extracting("errorCode")
+        .isEqualTo(ErrorCode.USER_NOT_FOUND);
+
+    verify(userRepository, never()).deleteById(any());
   }
 }

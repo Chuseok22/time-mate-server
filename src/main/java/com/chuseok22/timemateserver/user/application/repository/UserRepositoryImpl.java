@@ -31,4 +31,12 @@ public class UserRepositoryImpl implements UserRepository {
   public Optional<User> findByProviderAndProviderId(String provider, String providerId) {
     return jpaRepository.findByProviderAndProviderId(provider, providerId);
   }
+
+  @Override
+  public void deleteById(UUID id) {
+    if (!jpaRepository.existsById(id)) {
+      throw new CustomException(ErrorCode.USER_NOT_FOUND);
+    }
+    jpaRepository.deleteById(id);
+  }
 }

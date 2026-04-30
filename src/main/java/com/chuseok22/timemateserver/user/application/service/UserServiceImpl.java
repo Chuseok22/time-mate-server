@@ -1,5 +1,6 @@
 package com.chuseok22.timemateserver.user.application.service;
 
+import com.chuseok22.timemateserver.meeting.core.repository.AvailabilityTimeRepository;
 import com.chuseok22.timemateserver.meeting.core.repository.MeetingRoomRepository;
 import com.chuseok22.timemateserver.meeting.core.repository.ParticipantRepository;
 import com.chuseok22.timemateserver.meeting.infrastructure.entity.MeetingRoom;
@@ -28,6 +29,7 @@ public class UserServiceImpl implements UserService {
   private final UserRepository userRepository;
   private final MeetingRoomRepository meetingRoomRepository;
   private final ParticipantRepository participantRepository;
+  private final AvailabilityTimeRepository availabilityTimeRepository;
   private final UserMapper userMapper;
 
   @Override
@@ -70,5 +72,22 @@ public class UserServiceImpl implements UserService {
     return allRooms.stream()
         .map(room -> userMapper.toUserRoomResponse(room, userId))
         .toList();
+  }
+
+  @Override
+  @Transactional
+  public void deleteUser(UUID userId) {
+    // 존재 여부 확인 (없으면 USER_NOT_FOUND)
+    userRepository.findById(userId);
+
+    // FK 순서: AvailabilityTime → Participant → User
+    List<Participant> participants = participantRepository.findAllByUserId(userId);
+    for (Participant participant : participants) {
+      availabilityTimeRepository.deleteAllByParticipant(participant);
+      participantRepository.deleteById(participant.getId());
+    }
+
+    log.info("회원탈퇴 처리: userId={}, 삭제된 참가자 수={}", userId, participants.size());
+    userRepository.deleteById(userId);
   }
 }

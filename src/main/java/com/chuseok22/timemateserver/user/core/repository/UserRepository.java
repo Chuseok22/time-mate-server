@@ -11,4 +11,6 @@ public interface UserRepository {
   User findById(UUID id);
 
   Optional<User> findByProviderAndProviderId(String provider, String providerId);
+
+  void deleteById(UUID id);
 }

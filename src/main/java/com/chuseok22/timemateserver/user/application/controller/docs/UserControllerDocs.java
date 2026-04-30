@@ -71,4 +71,35 @@ public interface UserControllerDocs {
   ResponseEntity<List<UserRoomResponse>> getMyRooms(
       @Parameter(hidden = true) Authentication authentication
   );
+
+  @ApiChangeLogs({
+      @ApiChangeLog(
+          date = "2026-04-30",
+          author = "Chuseok22",
+          description = "회원탈퇴 API 추가",
+          issueUrl = "https://github.com/Chuseok22/time-mate-server/issues/33"
+      )
+  })
+  @Operation(
+      summary = "회원탈퇴",
+      description = """
+          ### 요청
+          - 인증 필요: `Authorization: Bearer <token>`
+
+          ### 동작 과정
+          1. JWT에서 userId 추출
+          2. 해당 사용자가 참가자로 등록된 모든 방에서 가용 시간 삭제
+          3. 해당 방들의 참가자 기록 삭제
+          4. 사용자 계정 삭제 (Hard Delete)
+
+          ### 유의 사항
+          - 본인 계정만 삭제 가능 (JWT 기반)
+          - 탈퇴 후 사용자가 생성한 방(MeetingRoom)은 삭제되지 않으나 방장 정보가 소멸하므로 이후 방 삭제 불가
+          - 복구 불가. 탈퇴 전 프론트에서 사용자에게 확인 안내 필요
+          - JWT 미포함 또는 만료 시 401 반환
+          """
+  )
+  ResponseEntity<Void> deleteUser(
+      @Parameter(hidden = true) Authentication authentication
+  );
 }
