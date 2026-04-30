@@ -42,3 +42,6 @@ application-*.yml
 src/main/resources/firebase-adminsdk.json
 
 .issue
+docs
+.report
+TODO.md
