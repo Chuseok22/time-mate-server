@@ -63,6 +63,86 @@ public class MeetingRoomServiceImpl implements MeetingRoomService { ... }
 - **Mapper**: DTO ↔ Entity 변환 로직만. `@Component` 빈으로 등록
 - **Entity**: DB 상태 관리. 정적 팩토리 메서드(`create()`) 허용, 비즈니스 로직 최소화
 
+## Swagger ControllerDocs 작성 규칙
+
+모든 컨트롤러는 반드시 대응하는 ControllerDocs 인터페이스를 가져야 한다.
+
+### 위치
+
+```
+{module}/application/controller/docs/{Controller명}Docs.java
+```
+
+예시: `MeetingRoomController` → `meeting/application/controller/docs/MeetingRoomControllerDocs.java`
+
+### 구조
+
+```java
+@Tag(name = "태그명", description = "그룹 설명")
+public interface MeetingRoomControllerDocs {
+
+  @ApiChangeLogs({
+      @ApiChangeLog(
+          date = "YYYY-MM-DD",
+          author = "Chuseok22",
+          description = "변경 내용 요약",
+          issueUrl = "https://github.com/Chuseok22/meet-time-server/issues/번호"
+      )
+  })
+  @Operation(
+      summary = "API 한줄 요약",
+      description = """
+          ### 요청 파라미터
+          - `필드명` (타입, 필수여부): 설명
+
+          ### 응답 데이터
+          - `필드명` (타입): 설명
+
+          ### 유의 사항
+          - 주요 에러 케이스 및 제약 조건 기술
+          """
+  )
+  ResponseEntity<응답타입> 메서드명(파라미터);
+}
+```
+
+### 필수 import
+
+```java
+import com.chuseok22.apichangelog.annotation.ApiChangeLog;
+import com.chuseok22.apichangelog.annotation.ApiChangeLogs;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+```
+
+### 컨트롤러 구현
+
+```java
+public class MeetingRoomController implements MeetingRoomControllerDocs {
+  // Docs 인터페이스의 어노테이션은 컨트롤러 메서드에 중복 작성하지 않음
+}
+```
+
+### @ApiChangeLog 작성 기준
+
+- 신규 API 추가 시: 해당 구현 날짜와 이슈 URL 기재
+- API 스펙 변경 시 (파라미터 추가/제거, 응답 구조 변경): 변경 이력 항목 추가 (최신순 정렬)
+- 단순 리팩토링이나 내부 구현 변경은 이력 추가 대상이 아님
+
+### @Operation description 작성 기준
+
+- 요청 파라미터: 타입, 필수 여부, 허용 값 범위 명시
+- 응답 데이터: 중첩 구조는 들여쓰기로 표현
+- 유의 사항: 에러 케이스(404, 400 등), 비즈니스 제약, 데이터 처리 방식(Upsert 여부 등) 기술
+- 경로 파라미터는 `@Parameter(description = "설명", required = true)` 추가
+
+### 리뷰 체크 항목 (추가)
+
+- [ ] 새 컨트롤러 생성 시 ControllerDocs 인터페이스가 함께 생성되었는지
+- [ ] 새 API 엔드포인트 추가 시 ControllerDocs에 메서드 추가 및 @ApiChangeLog 이력 기재 여부
+- [ ] API 스펙 변경 시 @ApiChangeLog 이력 업데이트 여부
+
 ## AOP 어노테이션 사용 기준
 
 | 어노테이션 | 적용 위치 | 용도 |

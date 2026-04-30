@@ -42,4 +42,19 @@ public class ParticipantRepositorImpl implements ParticipantRepository {
   public List<Participant> findAllByMeetingRoom(MeetingRoom meetingRoom) {
     return jpaRepository.findAllByMeetingRoom(meetingRoom);
   }
+
+  @Override
+  public List<Participant> findAllByUserId(UUID userId) {
+    return jpaRepository.findAllByUserId(userId);
+  }
+
+  @Override
+  public Participant findByMeetingRoomAndUserId(MeetingRoom meetingRoom, UUID userId) {
+    return jpaRepository.findByMeetingRoomAndUserId(meetingRoom, userId);
+  }
+
+  @Override
+  public void deleteById(UUID participantId) {
+    jpaRepository.deleteById(participantId);
+  }
 }

@@ -45,6 +45,11 @@ jobs:
         run: |
           echo "${{ secrets.APPLICATION_PROD_YML }}" > src/main/resources/application-prod.yml
 
+      # firebase-adminsdk.json 파일을 빌드 전에 생성
+      - name: Create firebase-adminsdk.json from secret
+        run: |
+          echo "${{ secrets.FIREBASE_ADMINSDK_JSON }}" > src/main/resources/firebase-adminsdk.json
+
       # 브랜치 별 active profile 설정
       - name: Decide active profile
         id: profile

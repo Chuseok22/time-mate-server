@@ -1,6 +1,7 @@
 package com.chuseok22.timemateserver.meeting.application.controller;
 
 import com.chuseok22.timemateserver.common.application.aop.LogMonitoringInvocation;
+import com.chuseok22.timemateserver.meeting.application.controller.docs.AvailabilityTimeControllerDocs;
 import com.chuseok22.timemateserver.meeting.application.dto.request.UpsertAvailabilityRequest;
 import com.chuseok22.timemateserver.meeting.core.service.AvailabilityTimeService;
 import jakarta.validation.Valid;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/time")
 @RequiredArgsConstructor
-public class AvailabilityTimeController {
+public class AvailabilityTimeController implements AvailabilityTimeControllerDocs {
 
   private final AvailabilityTimeService availabilityTimeService;
 

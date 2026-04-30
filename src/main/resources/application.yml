@@ -34,3 +34,9 @@ springdoc:
     path: /docs/swagger
 server:
   forward-headers-strategy: framework
+
+chuseok22:
+  api-change-log:
+    enabled: true               # 기능 활성화 (기본값: true)
+    entries-to-show: 10         # 표시할 최대 변경 이력 개수 (기본값: 10)
+    date-format: "yyyy-MM-dd"   # 날짜 표시 형식 (기본값: "yyyy-MM-dd")
