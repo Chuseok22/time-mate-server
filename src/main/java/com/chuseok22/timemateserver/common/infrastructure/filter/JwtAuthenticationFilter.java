@@ -10,12 +10,15 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -40,8 +43,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             );
         SecurityContextHolder.getContext().setAuthentication(authentication);
       } catch (CustomException e) {
-        // 토큰 오류는 GlobalExceptionHandler에서 처리하도록 SecurityContext를 비워둠
+        // 토큰이 존재하지만 유효하지 않은 경우: TOKEN_EXPIRED / INVALID_TOKEN 을 직접 반환
+        log.warn("JWT 인증 실패: errorCode={}, uri={}", e.getErrorCode(), request.getRequestURI());
         SecurityContextHolder.clearContext();
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8");
+        response.getWriter().write(
+            "{\"errorCode\":\"" + e.getErrorCode().name()
+                + "\",\"errorMessage\":\"" + e.getErrorCode().getMessage() + "\"}"
+        );
+        return;
       }
     }
 
