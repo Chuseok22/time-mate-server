@@ -1,7 +1,6 @@
 package com.chuseok22.timemateserver.user.application.controller;
 
 import com.chuseok22.timemateserver.common.application.aop.LogMonitoringInvocation;
-import com.chuseok22.timemateserver.user.application.controller.docs.GoogleAuthControllerDocs;
 import com.chuseok22.timemateserver.user.application.dto.request.FirebaseGoogleLoginRequest;
 import com.chuseok22.timemateserver.user.application.dto.response.GoogleLoginResponse;
 import com.chuseok22.timemateserver.user.core.service.GoogleAuthService;
