@@ -1,6 +1,8 @@
 package com.chuseok22.timemateserver.common.infrastructure.oauth2;
 
 import java.util.Map;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
 
 public class GoogleOAuth2UserInfo implements OAuth2UserInfo {
 
@@ -17,12 +19,23 @@ public class GoogleOAuth2UserInfo implements OAuth2UserInfo {
 
   @Override
   public String getProviderId() {
-    return (String) attributes.get("sub");
+    Object sub = attributes.get("sub");
+    if (sub == null) {
+      throw new OAuth2AuthenticationException(
+          new OAuth2Error(
+              "missing_provider_id",
+              "Google 사용자 ID를 찾을 수 없습니다",
+              null
+          )
+      );
+    }
+    return (String) sub;
   }
 
   @Override
   public String getNickname() {
-    return (String) attributes.get("name");
+    String name = (String) attributes.get("name");
+    return name != null ? name : "";
   }
 
   @Override

@@ -41,7 +41,11 @@ public class KakaoOAuth2UserInfo implements OAuth2UserInfo {
       return "";
     }
     Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
-    return profile != null ? (String) profile.get("nickname") : "";
+    if (profile == null) {
+      return "";
+    }
+    String nickname = (String) profile.get("nickname");
+    return nickname != null ? nickname : "";
   }
 
   @SuppressWarnings("unchecked")

@@ -68,4 +68,25 @@ class KakaoOAuth2UserInfoTest {
     // then
     assertThat(info.getNickname()).isEmpty();
   }
+
+  @Test
+  @DisplayName("profile 내 nickname이 null이면 빈 문자열 반환 (DB NOT NULL 제약 위반 방지)")
+  void getNickname_nicknameNullInProfile_returnsEmpty() {
+    // given
+    Map<String, Object> profile = new HashMap<>();
+    profile.put("nickname", null);  // nickname 키는 있으나 값이 null
+
+    Map<String, Object> kakaoAccount = new HashMap<>();
+    kakaoAccount.put("profile", profile);
+
+    Map<String, Object> attributes = new HashMap<>();
+    attributes.put("id", 333L);
+    attributes.put("kakao_account", kakaoAccount);
+
+    // when
+    KakaoOAuth2UserInfo info = new KakaoOAuth2UserInfo(attributes);
+
+    // then
+    assertThat(info.getNickname()).isEmpty();
+  }
 }
