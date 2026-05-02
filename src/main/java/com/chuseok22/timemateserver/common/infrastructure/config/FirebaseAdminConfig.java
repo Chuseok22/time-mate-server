@@ -19,20 +19,23 @@ import org.springframework.core.io.ClassPathResource;
 public class FirebaseAdminConfig {
 
   private static final String CLASSPATH_CREDENTIAL = "firebase-adminsdk.json";
+  // GitHub Secret 미설정 시 echo "" 로 생성되는 빈 파일(1바이트) 방어용 최소 크기
+  private static final long MIN_CREDENTIAL_SIZE = 10L;
 
   /**
    * Firebase Admin SDK 초기화.
    *
-   * 세 가지 자격증명 소스 중 하나가 존재할 때만 Bean 등록:
+   * 세 가지 자격증명 소스 중 하나가 유효할 때만 Bean 등록:
    * - FIREBASE_SERVICE_ACCOUNT_JSON : 서비스 계정 JSON 내용 (env var)
    * - GOOGLE_APPLICATION_CREDENTIALS : 서비스 계정 JSON 파일 경로 (env var)
-   * - classpath:firebase-adminsdk.json : CI/CD 빌드 시 GitHub Secret에서 주입되는 파일
+   * - classpath:firebase-adminsdk.json : CI/CD 빌드 시 GitHub Secret에서 주입되는 파일 (10바이트 초과 시만 유효)
    */
   @Bean
   @ConditionalOnExpression(
       "T(java.lang.System).getenv('FIREBASE_SERVICE_ACCOUNT_JSON') != null"
           + " || T(java.lang.System).getenv('GOOGLE_APPLICATION_CREDENTIALS') != null"
-          + " || new org.springframework.core.io.ClassPathResource('firebase-adminsdk.json').exists()"
+          + " || (new org.springframework.core.io.ClassPathResource('firebase-adminsdk.json').exists()"
+          + "     && new org.springframework.core.io.ClassPathResource('firebase-adminsdk.json').contentLength() > 10)"
   )
   public FirebaseAuth firebaseAuth() throws IOException {
     List<FirebaseApp> apps = FirebaseApp.getApps();
@@ -55,9 +58,9 @@ public class FirebaseAdminConfig {
           new ByteArrayInputStream(serviceAccountJson.getBytes(StandardCharsets.UTF_8))
       );
     }
-    // 2순위: CI/CD 빌드 시 classpath에 주입된 파일 (classpath:firebase-adminsdk.json)
+    // 2순위: CI/CD 빌드 시 classpath에 주입된 파일 — 빈 파일(Secret 미설정) 제외
     ClassPathResource classPathResource = new ClassPathResource(CLASSPATH_CREDENTIAL);
-    if (classPathResource.exists()) {
+    if (classPathResource.exists() && classPathResource.contentLength() > MIN_CREDENTIAL_SIZE) {
       log.info("classpath:{} 로 Firebase 자격증명 로드", CLASSPATH_CREDENTIAL);
       return GoogleCredentials.fromStream(classPathResource.getInputStream());
     }
