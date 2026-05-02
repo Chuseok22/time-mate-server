@@ -55,6 +55,9 @@ public enum ErrorCode {
   // Telegram
 
   TELEGRAM_MESSAGE_SEND_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "텔레그램 메시지 발송 실패"),
+
+  // Firebase
+  FIREBASE_TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "유효하지 않은 Firebase ID Token입니다."),
   ;
 
   private final HttpStatus status;
