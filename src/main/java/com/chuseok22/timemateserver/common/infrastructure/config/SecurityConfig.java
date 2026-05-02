@@ -5,11 +5,13 @@ import com.chuseok22.timemateserver.common.infrastructure.oauth2.CustomOAuth2Use
 import com.chuseok22.timemateserver.common.infrastructure.oauth2.OAuth2AuthenticationSuccessHandler;
 import com.chuseok22.timemateserver.common.infrastructure.properties.AppProperties;
 import com.chuseok22.timemateserver.common.infrastructure.util.JwtProvider;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -49,6 +51,24 @@ public class SecurityConfig {
             .requestMatchers(HttpMethod.DELETE, "/api/participant/**").authenticated()
             // 나머지 API: 공개 (Guest 포함 허용)
             .anyRequest().permitAll()
+        )
+        // oauth2Login()의 기본 EntryPoint가 OAuth2 URL로 리다이렉트하므로
+        // REST API 인증 실패 시 401 JSON을 반환하도록 명시적으로 재정의
+        .exceptionHandling(ex -> ex
+            .authenticationEntryPoint((request, response, authException) -> {
+              response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+              response.setContentType(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8");
+              response.getWriter().write(
+                  "{\"errorCode\":\"UNAUTHENTICATED\",\"errorMessage\":\"인증이 필요합니다.\"}"
+              );
+            })
+            .accessDeniedHandler((request, response, accessDeniedException) -> {
+              response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+              response.setContentType(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8");
+              response.getWriter().write(
+                  "{\"errorCode\":\"ACCESS_DENIED\",\"errorMessage\":\"접근이 거부되었습니다.\"}"
+              );
+            })
         )
         .oauth2Login(oauth2 -> oauth2
             .userInfoEndpoint(ui -> ui.userService(customOAuth2UserService))

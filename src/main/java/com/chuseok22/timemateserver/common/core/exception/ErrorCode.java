@@ -14,6 +14,8 @@ public enum ErrorCode {
 
   INVALID_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
 
+  UNAUTHENTICATED(HttpStatus.UNAUTHORIZED, "인증이 필요합니다."),
+
   ACCESS_DENIED(HttpStatus.FORBIDDEN, "접근이 거부되었습니다."),
 
   // JWT
