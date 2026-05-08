@@ -12,6 +12,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,6 +24,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private final JwtProvider jwtProvider;
+
+  // CORS preflight(OPTIONS) 요청은 JWT 검증 없이 통과
+  @Override
+  protected boolean shouldNotFilter(HttpServletRequest request) {
+    return HttpMethod.OPTIONS.matches(request.getMethod());
+  }
 
   @Override
   protected void doFilterInternal(HttpServletRequest request,

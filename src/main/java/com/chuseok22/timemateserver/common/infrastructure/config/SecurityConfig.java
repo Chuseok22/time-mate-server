@@ -44,6 +44,8 @@ public class SecurityConfig {
         .formLogin(AbstractHttpConfigurer::disable)
         .httpBasic(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(auth -> auth
+            // CORS preflight 요청 허용 (JWT 필터 shouldNotFilter와 이중 보호)
+            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             // 사용자 정보 API: 인증 필수
             .requestMatchers("/api/users/**").authenticated()
             // 방/참가자 삭제 API: 인증 필수
