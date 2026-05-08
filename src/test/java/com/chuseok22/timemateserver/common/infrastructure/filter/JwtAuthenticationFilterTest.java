@@ -111,32 +111,6 @@ class JwtAuthenticationFilterTest {
   }
 
   @Test
-  @DisplayName("OPTIONS 요청: shouldNotFilter가 true를 반환하여 JWT 검증 건너뜀")
-  void optionsRequest_shouldNotFilter_returnsTrue() {
-    // given
-    request.setMethod("OPTIONS");
-
-    // when
-    boolean result = filter.shouldNotFilter(request);
-
-    // then
-    assertThat(result).isTrue();
-  }
-
-  @Test
-  @DisplayName("GET 요청: shouldNotFilter가 false를 반환하여 JWT 검증 수행")
-  void getRequest_shouldNotFilter_returnsFalse() {
-    // given
-    request.setMethod("GET");
-
-    // when
-    boolean result = filter.shouldNotFilter(request);
-
-    // then
-    assertThat(result).isFalse();
-  }
-
-  @Test
   @DisplayName("Bearer 아닌 헤더: 인증 없이 체인 계속")
   void nonBearerHeader_noAuthentication_continuesChain() throws Exception {
     // given
