@@ -19,6 +19,7 @@ public class CorsConfig {
 
       // 3000번 포트
       "https://meet.chuseok22.com", // 프론트 배포
+    "https://chuseok22.com", // TODO: Google Adsense 심사 이후 제거
 
       // API
       "https://api.meet.chuseok22.com", // 메인 API 서버
